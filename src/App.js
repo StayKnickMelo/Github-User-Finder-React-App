@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 import axios from 'axios';
@@ -16,107 +16,103 @@ import About from './components/layout/About';
 import User from './components/users/User';
 
 
-class App extends Component {
+const App = ()=> {
 
-  state = {
-    users: [],
-    user: {},
-    repos: [],
-    loading: false,
-    alert: null
-  }
+  const [users, setUsers] = useState([]);
+  const [user, setUser] = useState({});
+  const [repos, setRepos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState(null);
 
 
   // Search Users
 
-  searchUsers = async (user) => {
+  const searchUsers = async (user) => {
 
-    this.setState({ loading: true });
-
+    setLoading(true)
 
     const res = await axios(`https://api.github.com/search/users?q=${user}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
 
-    this.setState({ users: res.data.items, loading: false });
+    setLoading(false);
+    setUsers(res.data.items);
+
 
   }
 
   // Search A Single User
-  searchUser = async (user) => {
-    this.setState({ loading: true });
+  const searchUser = async (user) => {
+   
+    setLoading(true);
 
     const res = await axios(`https://api.github.com/users/${user}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
 
-    this.setState({ loading: false, user: res.data });
+    setLoading(false);
+    setUser(res.data);
 
   }
 
   // Search User Repos
-  searchRepos = async (user) => {
-    this.setState({ loading: true });
+  const searchRepos = async (user) => {
+
+    setLoading(true);
 
     const res = await axios(`https://api.github.com/users/${user}/repos?per_page=5&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
 
-    this.setState({ loading: false, repos: res.data });
-
-
-
+    setLoading(false);
+    setRepos(res.data);
 
   }
 
   // Clear Users
-  clearUsers = () => {
-    this.setState({ users: [] });
+  const clearUsers = () => {
+
+    setUsers([]);
   }
 
   // Show alert
-  showAlert = (msg, type) => {
+  const showAlert = (msg, type) => {
 
-    this.setState({ alert: { msg, type } });
+    setAlert({ msg, type });
 
     setTimeout(() => {
-      this.setState({ alert: null })
+      setAlert(null)
     }, 2000);
 
   }
-
-  static defaultProps = {
-    title: 'GithubFinder',
-    icon: 'fab fa-github'
-  }
-
-  render() {
-
-    const { users, user, loading, repos } = this.state;
 
     return (
       <Router>
         <div className="App">
           <Nav title="UserFinder" icon='fab fa-github' />
           <div className="container">
-            {/* {this.state.alert !== null && <Alert alert={this.state.alert} />} */}
+            {/* {alert !== null && <Alert alert={alert} />} */}
             <Switch>
               <Route exact path='/' render={() => (
                 <Fragment>
-                  {this.state.alert !== null && <Alert alert={this.state.alert} />}
+                  {alert !== null && <Alert alert={alert} />}
                   <Search
-                    searchUsers={this.searchUsers}
-                    clearUsers={this.clearUsers}
-                    showClear={this.state.users.length > 0 ? true : false}
-                    showAlert={this.showAlert}
+                    searchUsers={searchUsers}
+                    clearUsers={clearUsers}
+                    showClear={users.length > 0 ? true : false}
+                    showAlert={showAlert}
                   />
                   <Users users={users} loading={loading} />
                 </Fragment>
               )} />
               <Route exact path='/about' component={About} />
               <Route exact path='/user/:username' render={(props) => (
-                <User searchUser={this.searchUser} {...props} user={user} loading={loading} searchRepos={this.searchRepos} repos={repos} />
+                <User searchUser={searchUser} {...props} user={user} loading={loading} searchRepos={searchRepos} repos={repos} />
               )} />
             </Switch>
           </div>
         </div>
       </Router>
     );
-  }
+}
+
+App.defaultProps = {
+  title: 'GithubFinder',
+  icon: 'fab fa-github'
 }
 
 export default App;
