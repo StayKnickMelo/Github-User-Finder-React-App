@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 import axios from 'axios';
@@ -15,8 +15,10 @@ import About from './components/layout/About';
 
 import User from './components/users/User';
 
+import GithubState from './context/github/Githubstate';
 
-const App = ()=> {
+
+const App = () => {
 
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState({});
@@ -27,21 +29,11 @@ const App = ()=> {
 
   // Search Users
 
-  const searchUsers = async (user) => {
-
-    setLoading(true)
-
-    const res = await axios(`https://api.github.com/search/users?q=${user}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
-
-    setLoading(false);
-    setUsers(res.data.items);
-
-
-  }
+  
 
   // Search A Single User
   const searchUser = async (user) => {
-   
+
     setLoading(true);
 
     const res = await axios(`https://api.github.com/users/${user}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`);
@@ -80,7 +72,8 @@ const App = ()=> {
 
   }
 
-    return (
+  return (
+    <GithubState>
       <Router>
         <div className="App">
           <Nav title="UserFinder" icon='fab fa-github' />
@@ -91,12 +84,12 @@ const App = ()=> {
                 <Fragment>
                   {alert !== null && <Alert alert={alert} />}
                   <Search
-                    searchUsers={searchUsers}
+                    
                     clearUsers={clearUsers}
                     showClear={users.length > 0 ? true : false}
                     showAlert={showAlert}
                   />
-                  <Users users={users} loading={loading} />
+                  <Users/>
                 </Fragment>
               )} />
               <Route exact path='/about' component={About} />
@@ -107,7 +100,8 @@ const App = ()=> {
           </div>
         </div>
       </Router>
-    );
+    </GithubState>
+  );
 }
 
 App.defaultProps = {

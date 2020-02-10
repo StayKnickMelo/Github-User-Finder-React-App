@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 const Nav = ({ title, icon }) => {
-
   
   return (
     <nav className="navbar bg-primary">

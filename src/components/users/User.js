@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Spinner from '../layout/Spinner';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 const User = (props) => {
 
   const { match, searchUser, user, loading, searchRepos, repos } = props;
+
   const {
     avatar_url,
     bio,
@@ -27,7 +28,7 @@ const User = (props) => {
   useEffect(() => {
     searchUser(username);
     searchRepos(username);
-
+    // eslint-disable-next-line
   }, []);
 
 
