@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Spinner from '../layout/Spinner';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+import GithubContext from '../../context/github/githubContext';
 
-const User = (props) => {
 
-  const { match, searchUser, user, loading, searchRepos, repos } = props;
+const User = ({match}) => {
+
+  const githubContext = useContext(GithubContext);
+
+  const { searchUser, user, searchRepos, repos, loading} = githubContext;
 
   const {
     avatar_url,
@@ -78,14 +81,6 @@ const User = (props) => {
         </div>
       </div>
   )
-}
-
-User.propTypes = {
-  loading: PropTypes.bool,
-  user: PropTypes.object.isRequired,
-  searchUser: PropTypes.func.isRequired,
-  searchRepos: PropTypes.func.isRequired,
-  repos: PropTypes.array.isRequired,
 }
 
 

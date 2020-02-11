@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 
-
 const UserItem = ({ user }) => {
 
   const { login, avatar_url } = user;
