@@ -8,7 +8,7 @@ import {
 } from '../types';
 
 
-export default (state, action)=> {
+export default (state, action) => {
 
   switch(action.type){
     case SET_LOADING:

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment} from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 
@@ -33,9 +33,7 @@ const App = () => {
                 <Route exact path='/' render={() => (
                   <Fragment>
                     {/* {alert !== null && <Alert alert={alert} />} */}
-                    <Search
-                    
-                    />
+                    <Search/>
                     <Users />
                   </Fragment>
                 )} />

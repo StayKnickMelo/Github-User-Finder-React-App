@@ -13,23 +13,13 @@ const Users = () => {
   return (
     loading ? <Spinner/>
     :
-    <div style={userStyle} >
+    <div className='users-container' >
       {users.map(user => (
         <UserItem key={user.id} user={user} />
       ))}
     </div>
   )
 
-}
-
-
-
-const userStyle = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(3, 1fr)',
-  gridGap: '1rem',
-  height: "100vh",
-  overflow: 'scroll',
 }
 
 export default Users
